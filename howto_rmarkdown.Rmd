@@ -1,0 +1,192 @@
+---
+title: 'how to: R Markdown'
+author: "C. Nell"
+date: "7/2/2018"
+output: 
+  html_document:
+    toc: TRUE
+    toc_float: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```  
+
+## R Markdown  
+
+- Produce high quality documents, reports, presentations and dashboards to share analyses   
+- Fully reproducbile  
+- Can include multiple languages, R, Python, SQL  
+- Variety of output types: https://rmarkdown.rstudio.com/gallery.html  
+- Interactive or static  
+
+This page is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+To install from CRAN:  
+```{r, eval=FALSE}
+install.packages('rmarkdown')
+install.packages('knitr')
+
+library(rmarkdown)
+library(knitr)
+```  
+
+## Resources
+
+This guide is a compilation of material from the following sources:  
+Cheatsheet: https://www.rstudio.com/wp-content/uploads/2016/03/rmarkdown-cheatsheet-2.0.pdf   
+Reference Guide: https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf  
+
+## Knit a document    
+
+**Open 'R Markdown' under 'File', 'New File' in the main menu.** Select 'Document' and 'HTML' output. To generate the output from an Rmd you will click the **Knit** button. This will produce an HTML document that includes both content as well as the output of any embedded R code chunks. 
+  
+You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+### Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+## Code chunks
+
+Note that the `echo = FALSE` parameter was added to the previous code chunk header to prevent printing of the R code that generated the plot. Output can be customized with various knitr options set in the `{}` or a chunk header.
+  
+Options:  
+- echo = TRUE/FALSE; display code in output document  
+- error = TRUE/FALSE; whether or not to continue rendering when an error occurs  
+- eval = TRUE/FALSE; run code in chunk  
+- include = TRUE/FALSE; include code in output  
+- fig.align = 'left','right','or 'center'  
+- fig.height or fig.width = plot dimensions in inches 
+- warning = TRUE/FALSE; display code warnings in document  
+- message = TRUE/FALSE; include package messages etc in document  
+- results = TRUE/FALSE; 'asis', 'hide',' or'hold'  
+- tidy = TRUE/FALSE - tidy code for display  
+
+More at: https://yihui.name/knitr/options/  
+
+### Global options  
+Chunk options can also be set for the entire document. To do so, include in a chunk:  
+```{r, eval=FALSE}
+knitr::opts_chunk$set(error = TRUE, eval = TRUE, message = FALSE, warning = FALSE)
+```
+
+### Shortcut  
+To quickly insert a chunk:  
+- press keyboard shortcut Cmd + Option = I (windows: Ctrl + Alt + I) 
+
+## Sharing analyses   
+Rmd is an very functional way to share results and statistical methods. Code chunks are easily annotated and used to compile analyses with visualizations. How much or how little code is in the resulting output can be configured using chunk options.    
+
+**Write a chunk that loads the ggplot2 package & set chunk options to 'include = FALSE'**  
+
+```{r, include=FALSE}
+library(ggplot2)
+library(DT)
+library(broom)
+```  
+
+**Read in dust dataset** 
+
+```{r}
+library(readxl)
+list.files('Mia/RdataDust')
+
+dust<-read.csv("Mia/RdataDust/filtered_table_w_metadata.csv") #otu table  
+mapping<-read.csv("Mia/RdataDust/SierraMap6.csv") #metadata 
+str(mapping)
+```  
+
+## Text syntax  
+
+Reference Guide: https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf    
+
+## Tables  
+
+You can use familiar command so include the structure of your data  
+
+```{r}
+head(dust)
+str(dust)
+summary(head(dust))
+dput(head(mapping))
+```  
+
+or using HTML widgets to make them interactive:  
+http://www.htmlwidgets.org/showcase_datatables.html  
+
+```{r, eval=FALSE}
+install.packages('DT')
+library(DT)
+```  
+```{r}
+datatable(dust)
+```  
+
+See the DT gituhub page for more customizations  
+https://rstudio.github.io/DT/  
+
+**Include description of data, show structure**  
+```{r}
+
+
+```
+
+### Statistical results   
+
+```{r}
+fit<-lm(Sepal.Length~Species, data=iris)
+fit
+summary(fit)
+summary(aov(fit))
+```  
+
+broom - Tidy up messy outputs https://cran.r-project.org/web/packages/broom/vignettes/broom.html  
+
+```{r, eval=FALSE}
+install.packages('broom')
+library(broom)
+```
+
+tidy - returns a dataframe with results, coefficients    
+```{r}
+tidy(fit)
+```   
+
+augment - returns a dataframe with fitted values and residuals for original points in the regression    
+```{r}
+augment(fit)
+```  
+  
+glance - returns a dataframe with summary statistics R2 and F-stat      
+```{r}
+glance(fit)
+```    
+
+**Add results of statistical test to rmd**  
+
+
+## Figures  
+```{r}
+
+```
+
+**Produce and annotate a plot using the dust data**
+
+### plotly  
+
+You can make figures interactive and very web friendly using plotly.  
+https://plot.ly/r/  
+
+
+## htmlwidgets  
+http://www.htmlwidgets.org/  
+
